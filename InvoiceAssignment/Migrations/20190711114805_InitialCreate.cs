@@ -9,19 +9,19 @@ namespace InvoiceAssignment.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Subject",
+                name: "Subjects",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Cin = table.Column<string>(nullable: true),
-                    Vat = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    Address = table.Column<string>(nullable: true)
+                    Crn = table.Column<string>(maxLength: 8, nullable: false),
+                    Vat = table.Column<string>(maxLength: 10, nullable: false),
+                    Name = table.Column<string>(maxLength: 255, nullable: false),
+                    Address = table.Column<string>(maxLength: 255, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Subject", x => x.Id);
+                    table.PrimaryKey("PK_Subjects", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -30,7 +30,7 @@ namespace InvoiceAssignment.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    RefNumber = table.Column<string>(nullable: true),
+                    RefNumber = table.Column<string>(maxLength: 14, nullable: false),
                     CreationDate = table.Column<DateTime>(nullable: false),
                     DueDate = table.Column<DateTime>(nullable: false),
                     IsPaid = table.Column<bool>(nullable: false),
@@ -41,15 +41,15 @@ namespace InvoiceAssignment.Migrations
                 {
                     table.PrimaryKey("PK_Invoices", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Invoices_Subject_RecipientId",
+                        name: "FK_Invoices_Subjects_RecipientId",
                         column: x => x.RecipientId,
-                        principalTable: "Subject",
+                        principalTable: "Subjects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Invoices_Subject_SupplierId",
+                        name: "FK_Invoices_Subjects_SupplierId",
                         column: x => x.SupplierId,
-                        principalTable: "Subject",
+                        principalTable: "Subjects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -60,8 +60,7 @@ namespace InvoiceAssignment.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Text = table.Column<string>(nullable: true),
-                    Quantity = table.Column<int>(nullable: false),
+                    Text = table.Column<string>(maxLength: 255, nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     InvoiceId = table.Column<int>(nullable: true)
                 },
@@ -101,7 +100,7 @@ namespace InvoiceAssignment.Migrations
                 name: "Invoices");
 
             migrationBuilder.DropTable(
-                name: "Subject");
+                name: "Subjects");
         }
     }
 }

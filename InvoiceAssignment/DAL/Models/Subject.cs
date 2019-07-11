@@ -11,13 +11,17 @@ namespace InvoiceAssignment.DAL.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Cin { get; set; }
+        [Required]
+        [MaxLength(8)]
+        public string Crn { get; set; }
+        [Required]
+        [MaxLength(10)]
         public string Vat { get; set; }
+        [Required]
+        [MaxLength(255)]
         public string Name { get; set; }
+        [Required]
+        [MaxLength(255)]
         public string Address { get; set; }
-        //[InverseProperty("Supplier")]
-        //public virtual ICollection<Invoice> SupplierInvoices { get; set; }
-        //[InverseProperty("Recipient")]
-        //public virtual ICollection<Invoice> RecipientInvoices { get; set; }
     }
 }

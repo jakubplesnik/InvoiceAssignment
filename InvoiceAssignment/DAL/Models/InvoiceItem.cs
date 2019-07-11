@@ -11,8 +11,10 @@ namespace InvoiceAssignment.DAL.Models
     {
         [Key]
         public int Id { get; set; }
+        [Required]
+        [MaxLength(255)]
         public string Text { get; set; }
-        public int Quantity { get; set; }
+        [Required]
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
         public virtual Invoice Invoice { get; set; }

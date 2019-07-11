@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using InvoiceAssignment.Auth;
 using InvoiceAssignment.DAL;
 using InvoiceAssignment.DAL.Models;
+using InvoiceAssignment.Domain.Communication;
 using InvoiceAssignment.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace InvoiceAssignment.Controllers
 {
+    [Authorize(Policy = Policies.UsersOnly)]
     [Route("api/[controller]")]
     [ApiController]
     public class InvoicesController : ControllerBase
@@ -22,24 +26,6 @@ namespace InvoiceAssignment.Controllers
         public InvoicesController(InvoiceDbContext dbContext, ILogger<InvoicesController> logger)
         {
             _dbContext = dbContext;
-        }
-
-        Invoice InvoiceViewToModel(InvoiceViewModel invoice)
-        {
-            var supplier = _dbContext.Subjects.Find(invoice.Supplier.Id);
-            var recipient = _dbContext.Subjects.Find(invoice.Recipient.Id);
-
-            var invoiceModel = new Invoice()
-            {
-                RefNumber = invoice.RefNumber,
-                CreationDate = DateTime.Parse(invoice.CreationDate, null, DateTimeStyles.RoundtripKind),
-                DueDate = DateTime.Parse(invoice.DueDate, null, DateTimeStyles.RoundtripKind),
-                Supplier = supplier,
-                Recipient = recipient,
-                IsPaid = invoice.IsPaid
-            };
-
-            return invoiceModel;
         }
 
         /// <summary>
@@ -73,7 +59,7 @@ namespace InvoiceAssignment.Controllers
 
             if (invoice == null)
             {
-                return NotFound("Invoice was not found.");
+                return NotFound(new BaseResponse(404, "Invoice was not found."));
             }
 
             var result = new InvoiceViewModel(invoice);
@@ -92,15 +78,19 @@ namespace InvoiceAssignment.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> AddInvoice([FromBody]Invoice inv)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             inv.Id = 0;
             inv.CreationDate = DateTime.UtcNow;
             inv.RefNumber = DateTime.Now.ToString("yyyyMMddHHmmss");
             inv.IsPaid = false;
+            foreach (var item in inv.InvoiceItems)
+            {
+                item.Invoice = inv;
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
             await _dbContext.Invoices.AddAsync(inv);
             await _dbContext.SaveChangesAsync();
@@ -111,37 +101,32 @@ namespace InvoiceAssignment.Controllers
         }
 
         [HttpPatch("{invoiceId}")]
-        public async Task<IActionResult> EditInvoice(int invoiceId, [FromBody]Invoice inv)
+        public async Task<IActionResult> EditInvoice(int invoiceId, [FromBody]JsonPatchDocument<Invoice> patchDoc)
         {
-            var invoice = _dbContext.GetInvoice(invoiceId);
-            if (inv.RefNumber != null)
+            if (patchDoc == null)
             {
-                invoice.RefNumber = inv.RefNumber;
+                return BadRequest();
+            }
+            
+            var invoice = _dbContext.GetInvoice(invoiceId);
+            if (invoice == null)
+            {
+                return NotFound();
             }
 
-            if (inv.CreationDate != null)
+            patchDoc.ApplyTo(invoice, ModelState);
+
+            var isValid = TryValidateModel(invoice);
+            if (!isValid)
             {
-                invoice.CreationDate = inv.CreationDate;
-            }
-                
-            if (inv.DueDate != null)
-            {
-                invoice.DueDate = inv.DueDate;
-            }
-                
-            if (inv.Supplier != null)
-            {
-                invoice.Supplier = inv.Supplier;
-            }
-                
-            if (inv.Recipient != null)
-            {
-                invoice.Recipient = inv.Recipient;
+                return BadRequest(ModelState);
             }
 
             await _dbContext.SaveChangesAsync();
 
-            return Ok();
+            var result = new InvoiceViewModel(invoice);
+
+            return Ok(result);
         }
 
         [HttpPatch("{invoiceId}/pay")]
@@ -151,12 +136,12 @@ namespace InvoiceAssignment.Controllers
 
             if (invoice == null)
             {
-                return NotFound();
+                return NotFound(new BaseResponse(404, "Invoice was not found."));
             }
 
             if (invoice.IsPaid)
             {
-                return BadRequest();
+                return BadRequest(new BaseResponse(400, "Invoice already paid."));
             }
 
             invoice.IsPaid = true;
@@ -201,20 +186,38 @@ namespace InvoiceAssignment.Controllers
 
             if (invoice == null)
             {
-                return NotFound("Invoice was not found.");
+                return NotFound(new BaseResponse(404, "Invoice was not found."));
             }
 
             var item = await _dbContext.InvoiceItems.FindAsync(itemId);
 
             if (item == null || item.Invoice != invoice)
             {
-                return NotFound("Item of specified invoice was not found.");
+                return NotFound(new BaseResponse(404, "Item of specified invoice was not found."));
             }
 
             _dbContext.InvoiceItems.Remove(item);
             await _dbContext.SaveChangesAsync();
 
-            return Ok("Item was successfuly removed.");
+            return Ok(new BaseResponse(200, "Item was successfuly removed."));
+        }
+
+        Invoice InvoiceViewToModel(InvoiceViewModel invoice)
+        {
+            var supplier = _dbContext.Subjects.Find(invoice.Supplier.Id);
+            var recipient = _dbContext.Subjects.Find(invoice.Recipient.Id);
+
+            var invoiceModel = new Invoice()
+            {
+                RefNumber = invoice.RefNumber,
+                CreationDate = DateTime.Parse(invoice.CreationDate, null, DateTimeStyles.RoundtripKind),
+                DueDate = DateTime.Parse(invoice.DueDate, null, DateTimeStyles.RoundtripKind),
+                Supplier = supplier,
+                Recipient = recipient,
+                IsPaid = invoice.IsPaid
+            };
+
+            return invoiceModel;
         }
     }
 }

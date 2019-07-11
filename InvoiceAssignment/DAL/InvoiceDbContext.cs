@@ -16,6 +16,26 @@ namespace InvoiceAssignment.DAL
         public InvoiceDbContext(DbContextOptions<InvoiceDbContext> options)
             : base(options) { }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Invoice>()
+                .Property(e => e.RefNumber)
+                .IsRequired();
+            builder.Entity<Invoice>()
+                .HasOne(e => e.Supplier)
+                .WithMany()
+                .HasForeignKey("SupplierId");
+            builder.Entity<Invoice>()
+                .HasOne(e => e.Recipient)
+                .WithMany()
+                .HasForeignKey("RecipientId");
+
+            builder.Entity<InvoiceItem>()
+                .HasOne(e => e.Invoice)
+                .WithMany(i => i.InvoiceItems)
+                .HasForeignKey("InvoiceId");
+        }
+
         public IEnumerable<Invoice> GetAllInvoices()
         {
             return Invoices

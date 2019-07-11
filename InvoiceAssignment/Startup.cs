@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using InvoiceAssignment.Auth;
 using InvoiceAssignment.DAL;
-using InvoiceAssignment.Middleware;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +28,19 @@ namespace InvoiceAssignment
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = ApiKeyAuthenticationOptions.DefaultScheme;
+                options.DefaultChallengeScheme = ApiKeyAuthenticationOptions.DefaultScheme;
+            }).AddApiKeySupport(options => {});
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(Policies.UsersOnly, policy => policy.Requirements.Add(new UsersOnlyRequirement()));
+            });
+
+            services.AddSingleton<IAuthorizationHandler, UsersOnlyAuthorizationHandler>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddDbContext<InvoiceDbContext>(options =>
@@ -41,7 +55,7 @@ namespace InvoiceAssignment
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseApiKeyMiddleware();
+            app.UseAuthentication();
 
             app.UseMvc();
         }

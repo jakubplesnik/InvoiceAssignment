@@ -33,7 +33,9 @@ namespace InvoiceAssignment.Migrations
 
                     b.Property<int?>("RecipientId");
 
-                    b.Property<string>("RefNumber");
+                    b.Property<string>("RefNumber")
+                        .IsRequired()
+                        .HasMaxLength(14);
 
                     b.Property<int?>("SupplierId");
 
@@ -57,9 +59,9 @@ namespace InvoiceAssignment.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("Quantity");
-
-                    b.Property<string>("Text");
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(255);
 
                     b.HasKey("Id");
 
@@ -74,17 +76,25 @@ namespace InvoiceAssignment.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Address");
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(255);
 
-                    b.Property<string>("Cin");
+                    b.Property<string>("Crn")
+                        .IsRequired()
+                        .HasMaxLength(8);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255);
 
-                    b.Property<string>("Vat");
+                    b.Property<string>("Vat")
+                        .IsRequired()
+                        .HasMaxLength(10);
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subject");
+                    b.ToTable("Subjects");
                 });
 
             modelBuilder.Entity("InvoiceAssignment.DAL.Models.Invoice", b =>
