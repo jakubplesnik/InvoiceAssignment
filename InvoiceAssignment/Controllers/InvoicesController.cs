@@ -47,7 +47,7 @@ namespace InvoiceAssignment.Controllers
         /// <summary>
         /// Returns the specified invoice
         /// </summary>
-        /// <param name="invoiceId">Invoice Id</param>
+        /// <param name="invoiceId">Invoice id</param>
         /// <response code="200">The request was processed successfully</response>
         /// <response code="404">Invoice was not found</response>
         [HttpGet("{invoiceId}")]
@@ -72,7 +72,7 @@ namespace InvoiceAssignment.Controllers
         /// </summary>
         /// <param name="inv">Invoice body</param>
         /// <response code="200">The request was processed successfully</response>
-        /// <response code="404">Invalid model state</response>
+        /// <response code="400">Invalid model state</response>
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
@@ -96,7 +96,18 @@ namespace InvoiceAssignment.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Edits an invoice
+        /// </summary>
+        /// <param name="invoiceId">Invoice id</param>
+        /// <param name="patchDoc">JSON Patch Document</param>
+        /// <response code="200">The request was processed successfully</response>
+        /// <response code="400">Invalid model state or missing patch document</response>
+        /// <response code="404">Invoice was not found</response>
         [HttpPatch("{invoiceId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> EditInvoice(int invoiceId, [FromBody]JsonPatchDocument<Invoice> patchDoc)
         {
             if (patchDoc == null)
@@ -125,7 +136,17 @@ namespace InvoiceAssignment.Controllers
             return Ok(result);
         }
 
-        [HttpPatch("{invoiceId}/pay")]
+        /// <summary>
+        /// Pay the specified invoice
+        /// </summary>
+        /// <param name="invoiceId">Invoice id</param>
+        /// <response code="200">The request was processed successfully</response>
+        /// <response code="400">Invoice was already paid</response>
+        /// <response code="404">Invoice was not found</response>
+        [HttpPost("{invoiceId}/pay")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> PayInvoice(int invoiceId)
         {
             var invoice = _dbContext.GetInvoice(invoiceId);
@@ -137,26 +158,35 @@ namespace InvoiceAssignment.Controllers
 
             if (invoice.IsPaid)
             {
-                return BadRequest(new BaseResponse(400, "Invoice already paid."));
+                return BadRequest(new BaseResponse(400, "Invoice is already paid."));
             }
 
             invoice.IsPaid = true;
 
             await _dbContext.SaveChangesAsync();
 
-            var result = new InvoiceViewModel(invoice);
-
-            return Ok(result);
+            return Ok(new BaseResponse(200, "Invoice was successfuly paid."));
         }
 
+        /// <summary>
+        /// Adds an invoice item to the specified invoice
+        /// </summary>
+        /// <param name="invoiceId">Invoice id</param>
+        /// <param name="item">Invoice item body</param>
+        /// <response code="200">The request was processed successfully</response>
+        /// <response code="400">Invalid model state</response>
+        /// <response code="404">Invoice was not found</response>
         [HttpPost("{invoiceId}/items")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> AddInvoiceItem(int invoiceId, [FromBody]InvoiceItem item)
         {
             var invoice = await _dbContext.Invoices.FindAsync(invoiceId);
 
             if (invoice == null)
             {
-                return NotFound();
+                return NotFound(new BaseResponse(404, "Invoice was not found"));
             }
 
             if (!ModelState.IsValid)
@@ -174,7 +204,16 @@ namespace InvoiceAssignment.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Deletes the specified invoice item of the specified invoice
+        /// </summary>
+        /// <param name="invoiceId">Invoice id</param>
+        /// <param name="itemId">Invoice item id</param>
+        /// <response code="200">The request was processed successfully</response>
+        /// <response code="404">Invoice or invoice item was not found</response>
         [HttpDelete("{invoiceId}/items/{itemId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> RemoveInvoiceItem(int invoiceId, int itemId)
         {
             var invoice = await _dbContext.Invoices.FindAsync(invoiceId);
