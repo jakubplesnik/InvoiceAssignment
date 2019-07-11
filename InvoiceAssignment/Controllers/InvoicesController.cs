@@ -101,13 +101,13 @@ namespace InvoiceAssignment.Controllers
         {
             if (patchDoc == null)
             {
-                return BadRequest();
+                return BadRequest(new BaseResponse(400, "Missing JSON Patch document."));
             }
             
             var invoice = _dbContext.GetInvoice(invoiceId);
             if (invoice == null)
             {
-                return NotFound();
+                return NotFound(new BaseResponse(404, "Invoice was not found."));
             }
 
             patchDoc.ApplyTo(invoice, ModelState);
