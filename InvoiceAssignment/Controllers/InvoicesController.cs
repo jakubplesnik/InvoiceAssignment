@@ -146,7 +146,6 @@ namespace InvoiceAssignment.Controllers
 
             invoice.IsPaid = true;
 
-            // save changes
             await _dbContext.SaveChangesAsync();
 
             var result = new InvoiceViewModel(invoice);
@@ -200,24 +199,6 @@ namespace InvoiceAssignment.Controllers
             await _dbContext.SaveChangesAsync();
 
             return Ok(new BaseResponse(200, "Item was successfuly removed."));
-        }
-
-        Invoice InvoiceViewToModel(InvoiceViewModel invoice)
-        {
-            var supplier = _dbContext.Subjects.Find(invoice.Supplier.Id);
-            var recipient = _dbContext.Subjects.Find(invoice.Recipient.Id);
-
-            var invoiceModel = new Invoice()
-            {
-                RefNumber = invoice.RefNumber,
-                CreationDate = DateTime.Parse(invoice.CreationDate, null, DateTimeStyles.RoundtripKind),
-                DueDate = DateTime.Parse(invoice.DueDate, null, DateTimeStyles.RoundtripKind),
-                Supplier = supplier,
-                Recipient = recipient,
-                IsPaid = invoice.IsPaid
-            };
-
-            return invoiceModel;
         }
     }
 }
