@@ -10,8 +10,7 @@ namespace InvoiceAssignment.DAL
     public class InvoiceDbContext : DbContext
     {
         public DbSet<Invoice> Invoices { get; set; }
-        public DbSet<Subject> Recipients { get; set; }
-        public DbSet<Subject> Suppliers { get; set; }
+        public DbSet<Subject> Subjects { get; set; }
         public DbSet<InvoiceItem> InvoiceItems { get; set; }
 
         public InvoiceDbContext(DbContextOptions<InvoiceDbContext> options)
