@@ -82,10 +82,6 @@ namespace InvoiceAssignment.Controllers
             inv.CreationDate = DateTime.UtcNow;
             inv.RefNumber = DateTime.Now.ToString("yyyyMMddHHmmss");
             inv.IsPaid = false;
-            foreach (var item in inv.InvoiceItems)
-            {
-                item.Invoice = inv;
-            }
 
             if (!ModelState.IsValid)
             {
