@@ -1,0 +1,183 @@
+﻿@model InvoiceAssignment.ViewModels.CreateEditViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@*<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group row">
+                <label asp-for="Supplier.Name" class="control-label"></label>
+                <input asp-for="Supplier.Name" class="form-control form-control-sm" />
+                <span asp-validation-for="Supplier.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group row">
+                <label asp-for="Supplier.Address" class="control-label"></label>
+                <input asp-for="Supplier.Address" class="form-control form-control-sm" />
+                <span asp-validation-for="Supplier.Address" class="text-danger"></span>
+            </div>
+            <div class="form-group row">
+                <label asp-for="CreationDate" class="control-label"></label>
+                <input asp-for="CreationDate" class="form-control form-control-sm" readonly/>
+                <span asp-validation-for="CreationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DueDate" class="control-label"></label>
+                <input asp-for="DueDate" class="form-control form-control-sm" />
+                <span asp-validation-for="DueDate" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsPaid" /> @Html.DisplayNameFor(model => model.IsPaid)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>*@
+
+
+
+<div>
+    <div class="card" style="border: 3px dashed #dee2e6">
+        <div class="card-header">
+            <div class="d-flex justify-content-between">
+                <span style="font-size: 24px; font-weight: 500">@Html.DisplayFor(i => i.Invoice.RefNumber) – Edit</span>
+                <span style="font-size: 24px"><i class="@(Model.Invoice.IsPaid ? "text-success far fa-check-circle fa-lg" : "text-danger far fa-times-circle fa-lg")"></i></span>
+            </div>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Invoice.Id" />
+                <input type="hidden" asp-for="Invoice.RefNumber" />
+                <input type="hidden" asp-for="Invoice.IsPaid" />
+                <div class="row container">
+                    <div class="col mr-2">
+                        <strong class="row">@Html.DisplayNameFor(i => i.Invoice.Supplier)</strong>
+                        <div class="form-group row">
+                            <span>@Html.DisplayNameFor(i => i.Invoice.Supplier.Name)</span>
+                            <input asp-for="Invoice.Supplier.Name" class="form-control form-control-sm" />
+                            <span asp-validation-for="Invoice.Supplier.Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <span>@Html.DisplayNameFor(i => i.Invoice.Supplier.Address)</span>
+                            <input asp-for="Invoice.Supplier.Address" class="form-control form-control-sm" />
+                            <span asp-validation-for="Invoice.Supplier.Address" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <span>@Html.DisplayNameFor(i => i.Invoice.Supplier.Crn)</span>
+                            <input asp-for="Invoice.Supplier.Crn" class="form-control form-control-sm" />
+                            <span asp-validation-for="Invoice.Supplier.Crn" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <span>@Html.DisplayNameFor(i => i.Invoice.Supplier.Vat)</span>
+                            <input asp-for="Invoice.Supplier.Vat" class="form-control form-control-sm" />
+                            <span asp-validation-for="Invoice.Supplier.Vat" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col mr-2">
+                        <strong class="row">@Html.DisplayNameFor(i => i.Invoice.Recipient)</strong>
+                        <div class="form-group row">
+                            <span>@Html.DisplayNameFor(i => i.Invoice.Recipient.Name)</span>
+                            <input asp-for="Invoice.Recipient.Name" class="form-control form-control-sm" />
+                            <span asp-validation-for="Invoice.Recipient.Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <span>@Html.DisplayNameFor(i => i.Invoice.Recipient.Address)</span>
+                            <input asp-for="Invoice.Recipient.Address" class="form-control form-control-sm" />
+                            <span asp-validation-for="Invoice.Recipient.Address" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <span>@Html.DisplayNameFor(i => i.Invoice.Recipient.Crn)</span>
+                            <input asp-for="Invoice.Recipient.Crn" class="form-control form-control-sm" />
+                            <span asp-validation-for="Invoice.Recipient.Crn" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <span>@Html.DisplayNameFor(i => i.Invoice.Recipient.Vat)</span>
+                            <input asp-for="Invoice.Recipient.Vat" class="form-control form-control-sm" />
+                            <span asp-validation-for="Invoice.Recipient.Vat" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-2 mt-4">
+                        <div class="form-group row">
+                            <span>@Html.DisplayNameFor(i => i.Invoice.CreationDate)</span>
+                            <input asp-for="Invoice.CreationDate" class="form-control form-control-sm" readonly />
+                        </div>
+                        <div class="form-group row">
+                            <span>@Html.DisplayNameFor(i => i.Invoice.DueDate)</span>
+                            <input asp-for="Invoice.DueDate" class="form-control form-control-sm" />
+                            <span asp-validation-for="Invoice.DueDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-check"></i> <strong>Save</strong></i>
+                </button>
+            </form>
+        </div>
+
+        <form asp-action="AddItem">
+            <input type="hidden" asp-for="InvoiceItem.Id" />
+            <input type="hidden" asp-for="InvoiceItem.Invoice" value="@Model.Invoice"/>
+            <table class="card-table table table-sm" style="border-bottom: 2px solid #dee2e6">
+                <thead>
+                    <tr>
+                        <th>Text</th>
+                        <th class="text-right">Price</th>
+                        <th style="white-space: nowrap; width: 1%;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Invoice.InvoiceItems)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Text)
+                            </td>
+                            <td class="text-right">
+                                @Html.DisplayFor(modelItem => item.Price)
+                            </td>
+                            <td style="white-space: nowrap; width: 1%;">
+                                <a asp-action="DeleteItem" asp-route-invoiceId="@item.Invoice.Id" asp-route-itemId="@item.Id" class="text-danger"><i class="far fa-minus-square fa-lg"></i></a>
+                            </td>
+                        </tr>
+                    }
+
+                    <tr>
+                        <td style="width: 84%">
+                            <input asp-for="InvoiceItem.Text" class="form-control form-control-sm" />
+                        </td>
+                        <td class="text-right" style="width: 15%">
+                            <input asp-for="InvoiceItem.Price" class="form-control form-control-sm" />
+                        </td>
+                        <td style="white-space: nowrap; width: 1%;">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-check"></i> <strong>Add</strong></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Total:</strong></td>
+                        <td class="text-right"><strong>@Model.Invoice.InvoiceItems.Sum(item => item.Price)</strong></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+        <div class="card-body">
+            <a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@Model.Invoice.Id"><i class="fa fa-angle-left"></i> <strong>Back</strong></a>
+        </div>
+</div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

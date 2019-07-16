@@ -1,0 +1,73 @@
+﻿@model InvoiceAssignment.DAL.Models.Invoice
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between">
+                <span style="font-size: 24px; font-weight: 500">@Html.DisplayFor(i => i.RefNumber)</span>
+                <span style="font-size: 24px"><i class="@(Model.IsPaid ? "text-success far fa-check-circle fa-lg" : "text-danger far fa-times-circle fa-lg")"></i></span>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row container">
+                <div class="col">
+                    <strong class="row">@Html.DisplayNameFor(i => i.Supplier)</strong>
+                    <div class="row">@Html.DisplayFor(i => i.Supplier.Name)</div>
+                    <div class="row">@Html.DisplayFor(i => i.Supplier.Address)</div>
+                    <div class="row">CRN: @Html.DisplayFor(i => i.Supplier.Crn), VAT: @Html.DisplayFor(i => i.Supplier.Vat)</div>
+                </div>
+                <div class="col">
+                    <strong class="row">@Html.DisplayNameFor(i => i.Recipient)</strong>
+                    <div class="row">@Html.DisplayFor(i => i.Recipient.Name)</div>
+                    <div class="row">@Html.DisplayFor(i => i.Recipient.Address)</div>
+                    <div class="row">CRN: @Html.DisplayFor(i => i.Recipient.Crn), VAT: @Html.DisplayFor(i => i.Recipient.Vat)</div>
+                </div>
+                <div class="col">
+                    <strong class="row">@Html.DisplayNameFor(i => i.CreationDate)</strong>
+                    <div class="row">@Html.DisplayFor(i => i.CreationDate)</div>
+                    <strong class="row">@Html.DisplayNameFor(i => i.DueDate)</strong>
+                    <div class="row">@Html.DisplayFor(i => i.DueDate)</div>
+                </div>
+            </div>
+        </div>
+
+        <table class="card-table table table-sm" style="border-bottom: 2px solid #dee2e6">
+            <thead>
+                <tr>
+                    <th>Text</th>
+                    <th class="text-right">Price</th>
+                    <th style="white-space: nowrap; width: 1%;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.InvoiceItems)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Text)
+                        </td>
+                        <td class="text-right">
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td style="white-space: nowrap; width: 1%;">
+                            <a asp-action="DeleteItem" asp-route-invoiceId="@item.Invoice.Id" asp-route-itemId="@item.Id" class="text-danger"><i class="far fa-minus-square fa-lg"></i></a>
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td><strong>Total:</strong></td>
+                    <td class="text-right"><strong>@Model.InvoiceItems.Sum(item => item.Price)</strong></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="card-body">
+            <a class="btn btn-outline-primary" asp-action="Index"><i class="fa fa-angle-left"></i> <strong>Back</strong></a>
+            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id"><i class="fas fa-edit"></i> <strong>Edit</strong></a>
+        </div>
+    </div>
+</div>

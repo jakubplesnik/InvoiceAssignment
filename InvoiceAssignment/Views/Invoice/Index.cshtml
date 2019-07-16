@@ -1,0 +1,84 @@
+﻿@model IEnumerable<InvoiceAssignment.DAL.Models.Invoice>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between">
+            <h4>Invoices</h4>
+            <a class="btn btn-success" asp-action="Create"><i class="fa fa-plus"></i> <strong>Create New</strong></a>
+        </div>
+
+    </div>
+
+    <table class="card-table table table-hover" style="border-bottom: 1px solid lightgray">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.RefNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Supplier)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Recipient)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreationDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DueDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsPaid)
+                </th>
+                @*<th>
+                </th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNumber)</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Supplier.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Recipient.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreationDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DueDate)
+                    </td>
+                    <td>
+                        <i class="@(item.IsPaid ? "text-secondary fa fa-check-circle" : "text-secondary fa fa-times-circle")"
+                           data-toggle="tooltip"
+                           data-placement="right"
+                           title="@(item.IsPaid ? "Paid" : "Unpaid")">
+                        </i>
+                    </td>
+                    @*<td class="text-right pr-4">
+                        @if (!item.IsPaid)
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-marker fa-lg"></i></a>
+                        }
+                        else
+                        {
+                            <i class="fa fa-marker fa-lg"></i>
+                        }
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger ml-2"><i class="fa fa-trash-alt fa-lg"></i></a>
+                    </td>*@
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="card-body"></div>
+</div>

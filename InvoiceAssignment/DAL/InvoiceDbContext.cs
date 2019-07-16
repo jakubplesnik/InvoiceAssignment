@@ -44,13 +44,31 @@ namespace InvoiceAssignment.DAL
                 .Include(i => i.InvoiceItems);
         }
 
+        public async Task<List<Invoice>> GetAllInvoicesAsync()
+        {
+            return await Invoices
+                .Include(i => i.Recipient)
+                .Include(i => i.Supplier)
+                .Include(i => i.InvoiceItems)
+                .ToListAsync();
+        }
+
         public Invoice GetInvoice(int id)
         {
             return Invoices
                 .Include(i => i.Recipient)
                 .Include(i => i.Supplier)
                 .Include(i => i.InvoiceItems)
-                .SingleOrDefault(i => i.Id == id);
+                .FirstOrDefault(i => i.Id == id);
+        }
+
+        public async Task<Invoice> GetInvoiceAsync(int? id)
+        {
+            return await Invoices
+                .Include(i => i.Recipient)
+                .Include(i => i.Supplier)
+                .Include(i => i.InvoiceItems)
+                .FirstOrDefaultAsync(i => i.Id == id);
         }
     }
 }

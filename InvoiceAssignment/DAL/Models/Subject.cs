@@ -14,12 +14,14 @@ namespace InvoiceAssignment.DAL.Models
         /// <summary>
         /// Subject CRN (Company Registration Number), IČO in Czech
         /// </summary>
+        [Display(Name = "CRN")]
         [Required]
         [MaxLength(8)]
         public string Crn { get; set; }
         /// <summary>
         /// Company VAT, DIČ in Czech
         /// </summary>
+        [Display(Name = "VAT")]
         [Required]
         [MaxLength(10)]
         public string Vat { get; set; }

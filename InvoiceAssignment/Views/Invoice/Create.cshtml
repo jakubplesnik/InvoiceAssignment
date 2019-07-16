@@ -1,0 +1,172 @@
+﻿@model InvoiceAssignment.DAL.Models.Invoice
+
+@{
+    ViewData["Title"] = "Create New Invoice";
+}
+
+<div>
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between">
+                <span style="font-size: 24px; font-weight: 500">Create New Invoice</span>
+            </div>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="RefNumber" />
+                <input type="hidden" asp-for="CreationDate" />
+                <input type="hidden" asp-for="IsPaid" />
+                <div class="container">
+                    <div class="row">
+                        <div class="col mr-2">
+                            <strong class="row">@Html.DisplayNameFor(i => i.Supplier)</strong>
+                            <div class="form-group row">
+                                <span>@Html.DisplayNameFor(i => i.Supplier.Name)</span>
+                                <input asp-for="Supplier.Name" class="form-control form-control-sm" />
+                                <span asp-validation-for="Supplier.Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group row">
+                                <span>@Html.DisplayNameFor(i => i.Supplier.Address)</span>
+                                <input asp-for="Supplier.Address" class="form-control form-control-sm" />
+                                <span asp-validation-for="Supplier.Address" class="text-danger"></span>
+                            </div>
+                            <div class="form-group row">
+                                <span>@Html.DisplayNameFor(i => i.Supplier.Crn)</span>
+                                <input asp-for="Supplier.Crn" class="form-control form-control-sm" />
+                                <span asp-validation-for="Supplier.Crn" class="text-danger"></span>
+                            </div>
+                            <div class="form-group row">
+                                <span>@Html.DisplayNameFor(i => i.Supplier.Vat)</span>
+                                <input asp-for="Supplier.Vat" class="form-control form-control-sm" />
+                                <span asp-validation-for="Supplier.Vat" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col mr-2">
+                            <strong class="row">@Html.DisplayNameFor(i => i.Recipient)</strong>
+                            <div class="form-group row">
+                                <span>@Html.DisplayNameFor(i => i.Recipient.Name)</span>
+                                <input asp-for="Recipient.Name" class="form-control form-control-sm" />
+                                <span asp-validation-for="Recipient.Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group row">
+                                <span>@Html.DisplayNameFor(i => i.Recipient.Address)</span>
+                                <input asp-for="Recipient.Address" class="form-control form-control-sm" />
+                                <span asp-validation-for="Recipient.Address" class="text-danger"></span>
+                            </div>
+                            <div class="form-group row">
+                                <span>@Html.DisplayNameFor(i => i.Recipient.Crn)</span>
+                                <input asp-for="Recipient.Crn" class="form-control form-control-sm" />
+                                <span asp-validation-for="Recipient.Crn" class="text-danger"></span>
+                            </div>
+                            <div class="form-group row">
+                                <span>@Html.DisplayNameFor(i => i.Recipient.Vat)</span>
+                                <input asp-for="Recipient.Vat" class="form-control form-control-sm" />
+                                <span asp-validation-for="Recipient.Vat" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-2 mt-4">
+                            <div class="form-group row">
+                                <span>@Html.DisplayNameFor(i => i.DueDate)</span>
+                                <input asp-for="DueDate" class="form-control form-control-sm" />
+                                <span asp-validation-for="DueDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <fieldset class="form-add-item">
+                    <label for="items"><strong>Items</strong></label>
+
+                    <table class="card-table table table-sm" style="border-bottom: 2px solid #dee2e6">
+                        <thead>
+                            <tr>
+                                <th>Text</th>
+                                <th class="text-right">Price</th>
+                                <th style="white-space: nowrap; width: 5%;"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="add-items">
+                            <tr class="add-item">
+                                <td style="width: 84%">
+                                    <input asp-for="InvoiceItems.First().Text" name="InvoiceItems[0].Text" class="form-control form-control-sm" />
+                                </td>
+                                <td style="width: 15%">
+                                    <input asp-for="InvoiceItems.First().Price" name="InvoiceItems[0].Price" class="form-control form-control-sm" />
+                                </td>
+                                @*<td style="white-space: nowrap; width: 1%; vertical-align: middle">
+                                    <a href="" class="text-danger btn-remove-item"><i class="far fa-minus-square fa-lg"></i></a>
+                                </td>*@
+                                <td>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-plus"></i> <strong>Create</strong></i>
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm btn-add-item">Add Item</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //var wrapper = $('.add-items');
+
+            //$(".btn-add-item").click(function(e) {
+            //    e.preventDefault();
+            //    $('.add-item:first-child').clone(true).appendTo(wrapper);
+
+            //    $('.add-item .btn-remove-item').show();
+            //});
+
+            //$('.btn-remove-item').click(function (e) {
+            //    e.preventDefault();
+            //    $(this).parents('.add-item').remove();
+
+            //    removeButton();
+            //});
+
+            //function removeButton() {
+            //    if ($('.add-item').length == 1) {
+            //        $('.add-item .btn-remove-item').remove();
+            //    }
+            //}
+
+            var i = 1;
+            $(".btn-add-item").click(function () {
+
+                var tableRow = "<tr class='add-item'>";
+                // Index value for grouping (non-sequential) row
+                tableRow += "<td><input asp-for='InvoiceItems.First().Text' name='InvoiceItems[" + (i - 1) + "].Text' class='form-control form-control-sm' /></td>";
+                tableRow += "<td><input asp-for='InvoiceItems.First().Price' name='InvoiceItems[" + (i - 1) + "].Price' value='0,00' class='form-control form-control-sm' /></td>";
+
+                tableRow += "<td><input class='btn-remove-item' type='button' value='del' /></td>";
+                tableRow += "</tr>";
+                $(".add-items").append(tableRow);
+
+                i++;
+
+                return false;
+            });
+
+            $('.btn-remove-item').click(function () {
+                $(this).parents('.add-item').remove();
+            });
+        });
+
+    </script>
+}
