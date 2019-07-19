@@ -13,7 +13,7 @@
 
     </div>
 
-    <table class="card-table table table-hover" style="border-bottom: 1px solid lightgray">
+    <table class="card-table table table table-hover" style="border-bottom: 1px solid lightgray">
         <thead>
             <tr>
                 <th>
@@ -31,38 +31,42 @@
                 <th>
                     @Html.DisplayNameFor(model => model.DueDate)
                 </th>
-                <th>
+                <th class="text-center">
                     @Html.DisplayNameFor(model => model.IsPaid)
                 </th>
-                @*<th>
-                </th>*@
+                <th class="text-right">
+                    Total (CZK)
+                </th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var invoice in Model)
             {
                 <tr>
                     <td>
-                        <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.RefNumber)</a>
+                        <a asp-action="Details" asp-route-id="@invoice.Id">@Html.DisplayFor(modelItem => invoice.RefNumber)</a>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Supplier.Name)
+                        @Html.DisplayFor(modelItem => invoice.Supplier.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Recipient.Name)
+                        @Html.DisplayFor(modelItem => invoice.Recipient.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.CreationDate)
+                        @Html.DisplayFor(modelItem => invoice.CreationDate)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DueDate)
+                        @Html.DisplayFor(modelItem => invoice.DueDate)
                     </td>
-                    <td>
-                        <i class="@(item.IsPaid ? "text-secondary fa fa-check-circle" : "text-secondary fa fa-times-circle")"
+                    <td class="text-center">
+                        <i class="@(invoice.IsPaid ? "text-secondary fa fa-check-circle" : "text-secondary fa fa-times-circle")"
                            data-toggle="tooltip"
                            data-placement="right"
-                           title="@(item.IsPaid ? "Paid" : "Unpaid")">
+                           title="@(invoice.IsPaid ? "Paid" : "Unpaid")">
                         </i>
+                    </td>
+                    <td class="text-right">
+                        @invoice.InvoiceItems.Sum(item => item.Price)
                     </td>
                     @*<td class="text-right pr-4">
                         @if (!item.IsPaid)

@@ -24,22 +24,22 @@
                         <div class="form-group row">
                             <span>@Html.DisplayNameFor(i => i.Invoice.Supplier.Name)</span>
                             <input asp-for="Invoice.Supplier.Name" class="form-control form-control-sm" />
-                            <span asp-validation-for="Invoice.Supplier.Name" class="text-danger"></span>
+                            <small><span asp-validation-for="Invoice.Supplier.Name" class="text-danger"></span></small>
                         </div>
                         <div class="form-group row">
                             <span>@Html.DisplayNameFor(i => i.Invoice.Supplier.Address)</span>
                             <input asp-for="Invoice.Supplier.Address" class="form-control form-control-sm" />
-                            <span asp-validation-for="Invoice.Supplier.Address" class="text-danger"></span>
+                            <small><span asp-validation-for="Invoice.Supplier.Address" class="text-danger"></span></small>
                         </div>
                         <div class="form-group row">
                             <span>@Html.DisplayNameFor(i => i.Invoice.Supplier.Crn)</span>
                             <input asp-for="Invoice.Supplier.Crn" class="form-control form-control-sm" />
-                            <span asp-validation-for="Invoice.Supplier.Crn" class="text-danger"></span>
+                            <small><span asp-validation-for="Invoice.Supplier.Crn" class="text-danger"></span></small>
                         </div>
                         <div class="form-group row">
                             <span>@Html.DisplayNameFor(i => i.Invoice.Supplier.Vat)</span>
                             <input asp-for="Invoice.Supplier.Vat" class="form-control form-control-sm" />
-                            <span asp-validation-for="Invoice.Supplier.Vat" class="text-danger"></span>
+                            <small><span asp-validation-for="Invoice.Supplier.Vat" class="text-danger"></span></small>
                         </div>
                     </div>
                     <div class="col mr-2">
@@ -47,22 +47,22 @@
                         <div class="form-group row">
                             <span>@Html.DisplayNameFor(i => i.Invoice.Recipient.Name)</span>
                             <input asp-for="Invoice.Recipient.Name" class="form-control form-control-sm" />
-                            <span asp-validation-for="Invoice.Recipient.Name" class="text-danger"></span>
+                            <small><span asp-validation-for="Invoice.Recipient.Name" class="text-danger"></span></small>
                         </div>
                         <div class="form-group row">
                             <span>@Html.DisplayNameFor(i => i.Invoice.Recipient.Address)</span>
                             <input asp-for="Invoice.Recipient.Address" class="form-control form-control-sm" />
-                            <span asp-validation-for="Invoice.Recipient.Address" class="text-danger"></span>
+                            <small><span asp-validation-for="Invoice.Recipient.Address" class="text-danger"></span></small>
                         </div>
                         <div class="form-group row">
                             <span>@Html.DisplayNameFor(i => i.Invoice.Recipient.Crn)</span>
                             <input asp-for="Invoice.Recipient.Crn" class="form-control form-control-sm" />
-                            <span asp-validation-for="Invoice.Recipient.Crn" class="text-danger"></span>
+                            <small><span asp-validation-for="Invoice.Recipient.Crn" class="text-danger"></span></small>
                         </div>
                         <div class="form-group row">
                             <span>@Html.DisplayNameFor(i => i.Invoice.Recipient.Vat)</span>
                             <input asp-for="Invoice.Recipient.Vat" class="form-control form-control-sm" />
-                            <span asp-validation-for="Invoice.Recipient.Vat" class="text-danger"></span>
+                            <small><span asp-validation-for="Invoice.Recipient.Vat" class="text-danger"></span></small>
                         </div>
                     </div>
                     <div class="col-2 mt-4">
@@ -73,8 +73,8 @@
                         <div class="form-group row">
                             <span>@Html.DisplayNameFor(i => i.Invoice.DueDate)</span>
                             <input asp-for="Invoice.DueDate" class="form-control form-control-sm" />
-                            <span asp-validation-for="Invoice.DueDate" class="text-danger"></span>
-                        </div>
+                            <small><span asp-validation-for="Invoice.DueDate" class="text-danger"></span></small>
+</div>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">
@@ -114,9 +114,11 @@
                     <tr>
                         <td style="width: 84%">
                             <input asp-for="InvoiceItem.Text" class="form-control form-control-sm" />
+                            <small><span asp-validation-for="InvoiceItem.Text" class="text-danger"></span></small>
                         </td>
                         <td class="text-right" style="width: 15%">
                             <input asp-for="InvoiceItem.Price" class="form-control form-control-sm" />
+                            <small><span asp-validation-for="InvoiceItem.Price" class="text-danger"></span></small>
                         </td>
                         <td style="white-space: nowrap; width: 1%;">
                             <button type="submit" class="btn btn-success btn-sm">

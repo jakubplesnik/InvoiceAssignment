@@ -1,6 +1,6 @@
 using System;
 
-namespace InvoiceTestAssignment.Models
+namespace InvoiceTestAssignment.ViewModels
 {
     public class ErrorViewModel
     {
