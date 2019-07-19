@@ -40,10 +40,6 @@ namespace InvoiceAssignment.Controllers
                 return NotFound();
             }
 
-            //var totalPrice = invoice.InvoiceItems.Sum(item => item.Price);
-
-
-
             return View(invoice);
         }
 
@@ -52,10 +48,24 @@ namespace InvoiceAssignment.Controllers
         {
             return View(new Invoice()
             {
+                Supplier = new Subject()
+                {
+                    Name = "Test",
+                    Address = "Test",
+                    Crn = "12345678",
+                    Vat = "CZ12345678"
+                },
+                Recipient = new Subject()
+                {
+                    Name = "Test",
+                    Address = "Test",
+                    Crn = "12345678",
+                    Vat = "CZ12345678"
+                },
                 DueDate = DateTime.Now,
                 InvoiceItems = new List<InvoiceItem>()
                 {
-                   new InvoiceItem()
+                    new InvoiceItem()
                 }
             });
         }
@@ -100,11 +110,11 @@ namespace InvoiceAssignment.Controllers
 
             return View(new CreateEditViewModel()
             {
-                Invoice = invoice,
-                InvoiceItem =  new InvoiceItem()
-                {
-                    Invoice = invoice
-                }
+                Invoice = invoice
+                //InvoiceItem =  new InvoiceItem()
+                //{
+                //    Invoice = invoice
+                //}
             });
         }
 
@@ -154,54 +164,56 @@ namespace InvoiceAssignment.Controllers
             return View(model.Invoice);
         }
 
-        // GET: Invoice/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> AddItem(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var invoice = await _dbContext.Invoices
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (invoice == null)
-            {
-                return NotFound();
-            }
+        //    var invoice = await _dbContext.GetInvoiceAsync(id);
+        //    if (invoice == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    if (invoice.IsPaid)
+        //    {
+        //        return BadRequest("Cannot add item to invoice. Invoice is already paid.");
+        //    }
 
-            return View(invoice);
-        }
-
-        // POST: Invoice/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var invoice = await _dbContext.Invoices.FindAsync(id);
-            _dbContext.Invoices.Remove(invoice);
-            await _dbContext.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        //    return View(new CreateEditViewModel()
+        //    {
+        //        Invoice = invoice,
+        //        InvoiceItem = new InvoiceItem()
+        //        {
+        //            Invoice = invoice
+        //        }
+        //    });
+        //}
 
         [HttpPost, ActionName("AddItem")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddItem([Bind("Invoice,InvoiceItem")] CreateEditViewModel model)
+        public async Task<IActionResult> AddItem([Bind("InvoiceItem")] CreateEditViewModel model)
         {
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var invoice = await _dbContext.Invoices.FindAsync(model.InvoiceItem.Invoice);
+            var invoice = await _dbContext.Invoices.FindAsync(model.InvoiceItem.InvoiceId);
             if (invoice == null)
             {
-                return NotFound($"Invoice {model.InvoiceItem.Invoice.Id} not found.");
+                return NotFound($"Invoice {model.InvoiceItem.InvoiceId} not found.");
             }
 
-            model.InvoiceItem.Invoice = invoice;
+            var item = new InvoiceItem()
+            {
+                Text = model.InvoiceItem.Text,
+                Price = model.InvoiceItem.Price,
+                Invoice = invoice
+            };
 
-            await _dbContext.InvoiceItems.AddAsync(model.InvoiceItem);
+            await _dbContext.InvoiceItems.AddAsync(item);
             await _dbContext.SaveChangesAsync();
 
             return RedirectToAction(nameof(Edit), new { id = invoice.Id });
@@ -229,7 +241,7 @@ namespace InvoiceAssignment.Controllers
             _dbContext.InvoiceItems.Remove(item);
             await _dbContext.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Details), new { id = invoiceId });
+            return RedirectToAction(nameof(Edit), new { id = invoiceId });
         }
 
         private bool InvoiceExists(int id)

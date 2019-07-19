@@ -9,6 +9,6 @@ namespace InvoiceAssignment.ViewModels
     public class CreateEditViewModel
     {
         public Invoice Invoice { get; set; }
-        public InvoiceItem InvoiceItem { get; set; }
+        public InvoiceItemViewModel InvoiceItem { get; set; }
     }
 }

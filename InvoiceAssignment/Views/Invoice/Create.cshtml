@@ -78,7 +78,10 @@
                 </div>
 
                 <fieldset class="form-add-item">
-                    <label for="items"><strong>Items</strong></label>
+                    <div class="d-flex justify-content-between">
+                        <label for="items"><strong>Items</strong></label>
+                        <button class="btn btn-success btn-sm btn-add-item mb-1"><i class="fas fa-plus"></i></button>
+                    </div>
 
                     <table class="card-table table table-sm" style="border-bottom: 2px solid #dee2e6">
                         <thead>
@@ -90,29 +93,26 @@
                         </thead>
                         <tbody class="add-items">
                             <tr class="add-item">
-                                <td style="width: 84%">
-                                    <input asp-for="InvoiceItems.First().Text" name="InvoiceItems[0].Text" class="form-control form-control-sm" />
+                                <td style="width: 80%">
+                                    <input asp-for="InvoiceItems.First().Text" name="InvoiceItems[0].Text" class="form-control form-control-sm input-text" />
                                 </td>
                                 <td style="width: 15%">
-                                    <input asp-for="InvoiceItems.First().Price" name="InvoiceItems[0].Price" class="form-control form-control-sm" />
+                                    <input asp-for="InvoiceItems.First().Price" name="InvoiceItems[0].Price" class="form-control form-control-sm input-price" value="" />
                                 </td>
-                                @*<td style="white-space: nowrap; width: 1%; vertical-align: middle">
-                                    <a href="" class="text-danger btn-remove-item"><i class="far fa-minus-square fa-lg"></i></a>
-                                </td>*@
-                                <td>
-
+                                <td style="white-space: nowrap; width: 5%; vertical-align: middle">
+                                    <button type="button" class="btn btn-danger btn-sm btn-remove-item" style="display:none">
+                                        <i class="fas fa-minus fa-sm"></i>
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </fieldset>
 
-                <div class="d-flex justify-content-between">
-                    <button type="submit" class="btn btn-success">
-                        <i class="fas fa-plus"></i> <strong>Create</strong></i>
-                    </button>
-                    <button class="btn btn-outline-primary btn-sm btn-add-item">Add Item</button>
-                </div>
+                <a class="btn btn-outline-primary" asp-action="Index"><i class="fa fa-angle-left"></i> <strong>Back</strong></a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> <strong>Create</strong></i>
+                </button>
 
             </form>
         </div>
@@ -124,48 +124,44 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            //var wrapper = $('.add-items');
-
-            //$(".btn-add-item").click(function(e) {
-            //    e.preventDefault();
-            //    $('.add-item:first-child').clone(true).appendTo(wrapper);
-
-            //    $('.add-item .btn-remove-item').show();
-            //});
-
-            //$('.btn-remove-item').click(function (e) {
-            //    e.preventDefault();
-            //    $(this).parents('.add-item').remove();
-
-            //    removeButton();
-            //});
-
-            //function removeButton() {
-            //    if ($('.add-item').length == 1) {
-            //        $('.add-item .btn-remove-item').remove();
-            //    }
-            //}
-
             var i = 1;
-            $(".btn-add-item").click(function () {
+            var wrapper = $('.add-items');
 
-                var tableRow = "<tr class='add-item'>";
-                // Index value for grouping (non-sequential) row
-                tableRow += "<td><input asp-for='InvoiceItems.First().Text' name='InvoiceItems[" + (i - 1) + "].Text' class='form-control form-control-sm' /></td>";
-                tableRow += "<td><input asp-for='InvoiceItems.First().Price' name='InvoiceItems[" + (i - 1) + "].Price' value='0,00' class='form-control form-control-sm' /></td>";
+            $(".btn-add-item").click(function(e) {
+                e.preventDefault();
+                var clone = $('.add-item:first-child').clone(true);
+                $(clone).find('.input-text').val('');
+                $(clone).find('.input-price').val('');
 
-                tableRow += "<td><input class='btn-remove-item' type='button' value='del' /></td>";
-                tableRow += "</tr>";
-                $(".add-items").append(tableRow);
+                clone.find('[name]').attr('name', function (_, name) {
+                    return name.replace(/\[\d+\]/, '[' + i + ']');
+                });
 
                 i++;
+                clone.appendTo(wrapper);
 
-                return false;
+                $('.add-item:not(:first-child) .btn-remove-item').show();
             });
 
-            $('.btn-remove-item').click(function () {
+            $('.btn-remove-item').click(function (e) {
+                e.preventDefault();
                 $(this).parents('.add-item').remove();
+                console.log('help');
+
+                hideButton();
             });
+
+            $('.btn-create').click(function (e) {
+                e.preventDefault();
+
+            });
+
+            function hideButton() {
+                //if ($('.add-item').length == 1) {
+                //    $('.add-item .btn-remove-item').hide();
+                //}
+                $('.add-item:first-child .btn-remove-item').hide();
+            }
         });
 
     </script>

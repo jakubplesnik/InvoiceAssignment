@@ -9,7 +9,12 @@
         <div class="card-header">
             <div class="d-flex justify-content-between">
                 <span style="font-size: 24px; font-weight: 500">@Html.DisplayFor(i => i.RefNumber)</span>
-                <span style="font-size: 24px"><i class="@(Model.IsPaid ? "text-success far fa-check-circle fa-lg" : "text-danger far fa-times-circle fa-lg")"></i></span>
+                <span style="font-size: 24px"
+                      data-toggle="tooltip"
+                      data-placement="right"
+                      title="@(Model.IsPaid ? "Paid" : "Unpaid")">
+                    <i class="@(Model.IsPaid ? "text-success far fa-check-circle fa-lg" : "text-danger far fa-times-circle fa-lg")"></i>
+                </span>
             </div>
         </div>
         <div class="card-body">
@@ -40,7 +45,6 @@
                 <tr>
                     <th>Text</th>
                     <th class="text-right">Price</th>
-                    <th style="white-space: nowrap; width: 1%;"></th>
                 </tr>
             </thead>
             <tbody>
@@ -53,21 +57,20 @@
                         <td class="text-right">
                             @Html.DisplayFor(modelItem => item.Price)
                         </td>
-                        <td style="white-space: nowrap; width: 1%;">
-                            <a asp-action="DeleteItem" asp-route-invoiceId="@item.Invoice.Id" asp-route-itemId="@item.Id" class="text-danger"><i class="far fa-minus-square fa-lg"></i></a>
-                        </td>
                     </tr>
                 }
                 <tr>
                     <td><strong>Total:</strong></td>
                     <td class="text-right"><strong>@Model.InvoiceItems.Sum(item => item.Price)</strong></td>
-                    <td></td>
                 </tr>
             </tbody>
         </table>
         <div class="card-body">
             <a class="btn btn-outline-primary" asp-action="Index"><i class="fa fa-angle-left"></i> <strong>Back</strong></a>
-            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id"><i class="fas fa-edit"></i> <strong>Edit</strong></a>
+            @if (!Model.IsPaid)
+            {
+                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id"><i class="fas fa-edit"></i> <strong>Edit</strong></a>
+            }
         </div>
     </div>
 </div>

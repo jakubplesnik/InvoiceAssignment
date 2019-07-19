@@ -4,45 +4,6 @@
     ViewData["Title"] = "Edit";
 }
 
-@*<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group row">
-                <label asp-for="Supplier.Name" class="control-label"></label>
-                <input asp-for="Supplier.Name" class="form-control form-control-sm" />
-                <span asp-validation-for="Supplier.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group row">
-                <label asp-for="Supplier.Address" class="control-label"></label>
-                <input asp-for="Supplier.Address" class="form-control form-control-sm" />
-                <span asp-validation-for="Supplier.Address" class="text-danger"></span>
-            </div>
-            <div class="form-group row">
-                <label asp-for="CreationDate" class="control-label"></label>
-                <input asp-for="CreationDate" class="form-control form-control-sm" readonly/>
-                <span asp-validation-for="CreationDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DueDate" class="control-label"></label>
-                <input asp-for="DueDate" class="form-control form-control-sm" />
-                <span asp-validation-for="DueDate" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsPaid" /> @Html.DisplayNameFor(model => model.IsPaid)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>*@
-
-
-
 <div>
     <div class="card" style="border: 3px dashed #dee2e6">
         <div class="card-header">
@@ -123,8 +84,9 @@
         </div>
 
         <form asp-action="AddItem">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="InvoiceItem.Id" />
-            <input type="hidden" asp-for="InvoiceItem.Invoice" value="@Model.Invoice"/>
+            <input type="hidden" asp-for="InvoiceItem.InvoiceId" value="@Model.Invoice.Id" />
             <table class="card-table table table-sm" style="border-bottom: 2px solid #dee2e6">
                 <thead>
                     <tr>
@@ -144,7 +106,7 @@
                                 @Html.DisplayFor(modelItem => item.Price)
                             </td>
                             <td style="white-space: nowrap; width: 1%;">
-                                <a asp-action="DeleteItem" asp-route-invoiceId="@item.Invoice.Id" asp-route-itemId="@item.Id" class="text-danger"><i class="far fa-minus-square fa-lg"></i></a>
+                                <a asp-action="DeleteItem" asp-route-invoiceId="@item.Invoice.Id" asp-route-itemId="@item.Id" class="btn btn-danger btn-sm"><i class="fas fa-minus"></i></a>
                             </td>
                         </tr>
                     }
@@ -157,8 +119,8 @@
                             <input asp-for="InvoiceItem.Price" class="form-control form-control-sm" />
                         </td>
                         <td style="white-space: nowrap; width: 1%;">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-check"></i> <strong>Add</strong></i>
+                            <button type="submit" class="btn btn-success btn-sm">
+                                <i class="fas fa-plus"></i>
                             </button>
                         </td>
                     </tr>
